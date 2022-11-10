@@ -2,6 +2,8 @@ package com.example.mystery1server.service;
 
 import com.example.mystery1server.models.Documents;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
@@ -20,5 +22,21 @@ public class DocumentsService {
         ApiFuture<WriteResult> apiFuture = firestore.collection(COLLECTION_NAME).document(documents.getTitle()).set(documents);
 
         return apiFuture.get().getUpdateTime().toString();
+    }
+
+    public Documents getDocuments(String title) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+
+        DocumentReference documentReference = firestore.collection(COLLECTION_NAME).document(title);
+
+        ApiFuture<DocumentSnapshot> apiFuture = documentReference.get();
+
+        DocumentSnapshot documentSnapshot = apiFuture.get();
+
+        if (documentSnapshot.exists()){
+            return documentSnapshot.toObject(Documents.class);
+        } else {
+            return null;
+        }
     }
 }

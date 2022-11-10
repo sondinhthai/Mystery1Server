@@ -1,17 +1,17 @@
 package com.example.mystery1server.models;
 
 public class Documents {
-    private String title;
     private String content;
     private String imgUrl;
+    private String title;
 
     public Documents() {
     }
 
-    public Documents(String title, String content, String imgUrl) {
-        this.title = title;
+    public Documents(String content, String imgUrl, String title) {
         this.content = content;
         this.imgUrl = imgUrl;
+        this.title = title;
     }
 
     public String getTitle() {

@@ -14,15 +14,17 @@ import java.io.IOException;
 public class FirebaseInitialization {
 
     @PostConstruct
-    public void init() throws IOException {
+    public void initialization() throws IOException {
+
         FileInputStream serviceAccount =
-                new FileInputStream("./serviceAccountKey.json");
+                new FileInputStream("C:\\Users\\Admin\\IdeaProjects\\Mystery1Server\\serviceAccountKey.json");
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
 
         FirebaseApp.initializeApp(options);
+
 
     }
 }
