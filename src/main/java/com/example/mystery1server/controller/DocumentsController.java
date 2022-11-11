@@ -5,6 +5,7 @@ import com.example.mystery1server.service.DocumentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -21,5 +22,10 @@ public class DocumentsController {
     @GetMapping("/Documents/{title}")
     public Documents getDocument(@PathVariable String title) throws ExecutionException, InterruptedException {
         return documentsService.getDocuments(title);
+    }
+
+    @GetMapping("/Documents/all")
+    public List<Documents> getAllDocument() throws ExecutionException, InterruptedException {
+        return documentsService.getAllDocuments();
     }
 }

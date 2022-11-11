@@ -2,13 +2,11 @@ package com.example.mystery1server.service;
 
 import com.example.mystery1server.models.Documents;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -35,6 +33,22 @@ public class DocumentsService {
 
         if (documentSnapshot.exists()){
             return documentSnapshot.toObject(Documents.class);
+        } else {
+            return null;
+        }
+    }
+
+    public List<Documents> getAllDocuments() throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+
+        CollectionReference collectionReference = firestore.collection(COLLECTION_NAME);
+
+        ApiFuture<QuerySnapshot> apiFuture = collectionReference.get();
+
+        QuerySnapshot querySnapshot = apiFuture.get();
+
+        if (!querySnapshot.isEmpty()){
+            return querySnapshot.toObjects(Documents.class);
         } else {
             return null;
         }
