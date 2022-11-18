@@ -13,6 +13,56 @@ import java.util.concurrent.ExecutionException;
 public class DocumentsService {
 
     private static final String COLLECTION_NAME = "Documents";
+    private static final String COLLECTION_BOOKMARKS = "Bookmarks";
+
+    public String saveBookmarks(Documents documents) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+
+        ApiFuture<WriteResult> apiFuture = firestore.collection(COLLECTION_BOOKMARKS).document(documents.getTitle()).set(documents);
+
+        return apiFuture.get().getUpdateTime().toString();
+    }
+
+    public String deleteBookmarks(Documents documents) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+
+        ApiFuture<WriteResult> apiFuture = firestore.collection(COLLECTION_BOOKMARKS).document(documents.getTitle()).delete();
+
+        return apiFuture.get().getUpdateTime().toString();
+    }
+
+    public Documents getBookmarks(String title) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+
+        DocumentReference documentReference = firestore.collection(COLLECTION_BOOKMARKS).document(title);
+
+        ApiFuture<DocumentSnapshot> apiFuture = documentReference.get();
+
+        DocumentSnapshot documentSnapshot = apiFuture.get();
+
+        if (documentSnapshot.exists()){
+            return documentSnapshot.toObject(Documents.class);
+        } else {
+            return null;
+        }
+    }
+
+    public List<Documents> getAllBookmarks() throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+
+        CollectionReference collectionReference = firestore.collection(COLLECTION_BOOKMARKS);
+
+        ApiFuture<QuerySnapshot> apiFuture = collectionReference.get();
+
+        QuerySnapshot querySnapshot = apiFuture.get();
+
+        if (!querySnapshot.isEmpty()){
+            return querySnapshot.toObjects(Documents.class);
+        } else {
+            return null;
+        }
+    }
+
 
     public String saveDocument(Documents documents) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
